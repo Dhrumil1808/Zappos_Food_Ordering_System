@@ -2,25 +2,31 @@ package com.system.dao;
 
 import java.util.List;
 import com.system.entity.Menu;
-import org.springframework.data.jpa.domain.Specification;
+import com.system.entity.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface MenuDAO extends CrudRepository<Menu,Integer>{
+public interface MenuDAO extends JpaRepository<Menu,Integer>{
 	/**
 	 * @param number
 	 * @return
 	 */
-	List<Menu> findByName(String Name);
+	   
+	List<Menu> findByRestaurantRestaurantId(int RestaurantId);
+
+    void deleteByRestaurantRestaurantId(int RestaurantId);
+    
+	/*List<Menu> findByName(String Name);
 	List<Menu> getAllMenus();
-    Menu getMenuById(long menuId);
-    boolean addMenu(Menu menu);
-    void updateMenu(Menu menu);
-    void deleteMenu(int menuId);
+    boolean addMenu(Restaurant restaurant,Menu menu);
+    void updateMenu(Restaurant restaurant,Menu menu);
+    void deleteMenu(Restaurant restaurant,int menuId);
+    */
 	/**
-	 * @param spec
+	 * @param restaurantId
 	 */
-	List<Menu> findAll(Specification spec);
+	//List<Menu> findAll(Integer restaurantId);
 }
