@@ -1,59 +1,80 @@
 package com.system.entity;
 
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table(name="Menu_Item")
-public class MenuItem implements Serializable { 
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="Menu_Item_Id")
-    private int menuItemId;  
-	@Column(name="Menu_Id")
-    private int menuId;  
-	@Column(name="Restaurant_Id")
-    private int restaurantId;
-	@Column(name="Item_Name")	
-	private String itemName;
-	@Column(name="Item_Price")	
-	private int itemPrice;
+@Table(name="MenuItem")
+@NoArgsConstructor
+public class MenuItem {
+
 	
-	public int getMenuId() {
-		return menuId;
+    @Id
+    @GeneratedValue
+    private int ItemId;
+
+    private String ItemName;
+
+    private Double ItemPrice;
+    
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "MenuId")
+    private Menu menu;
+
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "RestaurantId")
+    private Restaurant restaurant;
+    
+    private Menu getMenu(){
+    	return menu;
+    }
+    
+    public void setMenu(Menu menu) {
+		// TODO Auto-generated method stub
+		this.menu = menu;
 	}
-	public void setMenuId(int menuId) {
-		this.menuId = menuId;
+    
+    
+    private Restaurant getRestaurant(){
+    	return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+		// TODO Auto-generated method stub
+		this.restaurant=restaurant;
 	}
-	public int getRestaurantId() {
-		return restaurantId;
-	}
-	public void setRestaurantId(int restaurantId) {
-		this.restaurantId = restaurantId;
-	}
-	public int getMenuItemId() {
-		return menuItemId;
-	}
-	public void setMenuItemId(int menuItemId) {
-		this.menuItemId = menuItemId;
-	}
-	public String getItemName() {
-		return itemName;
-	}
-	public void setItemName(String itemName) {
-		this.itemName = itemName;
-	}
-	public int getItemPrice() {
-		return itemPrice;
-	}
-	public void setItemPrice(int itemPrice) {
-		this.itemPrice = itemPrice;
-	}
+    
+    
+    
+    public MenuItem(@JsonProperty("name") String ItemName, @JsonProperty("price") Double ItemPrice) {
+        this.ItemName = ItemName;
+        this.ItemPrice = ItemPrice;
+    }
+    
+    public MenuItem(@JsonProperty("name") String ItemName, @JsonProperty("price") Double ItemPrice,@JsonProperty("restaurant") Restaurant restaurant,@JsonProperty("menu") Menu menu) {
+        this.ItemName = ItemName;
+        this.ItemPrice = ItemPrice;
+        this.restaurant=restaurant;
+        this.menu=menu;
+    }
+
+    @Override
+    public String toString() {
+        return "MenuItem{" +
+                "id=" + ItemId +
+                ", name='" + ItemName + '\'' +
+                ", price=" + ItemPrice +
+                '}';
+    }
 	
-} 
+}
