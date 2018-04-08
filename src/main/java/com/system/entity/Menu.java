@@ -1,42 +1,69 @@
 package com.system.entity;
+import com.fasterxml.jackson.annotation.*;
 
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import javax.persistence.*;
+
+import java.util.List;
 
 @Entity
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Table(name="Menu")
-public class Menu implements Serializable { 
-	private static final long serialVersionUID = 1L;
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-	@Column(name="Menu_Id")
-    private int menuId;  
-	@Column(name="Restaurant_Id")
-    private int restaurantId;
-	@Column(name="Menu_Name")	
-	private String MenuName;
+@NoArgsConstructor
+public class Menu {
+
+    @GeneratedValue
+    @Id
+    private int menuId;
+
+    private String menuName;
+    
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "RestaurantId")
+    private Restaurant restaurant;
+
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL,orphanRemoval=true)
+    private List<MenuItem> items;
+
+    
+    public List<MenuItem> getItems() {
+		return items;
+	}
+
+	public void setItems(List<MenuItem> items) {
+		this.items = items;
+	}
 	
-	public int getMenuId() {
-		return menuId;
-	}
-	public void setMenuId(int menuId) {
-		this.menuId = menuId;
-	}
-	public int getRestaurantId() {
-		return restaurantId;
-	}
-	public void setRestaurantId(int restaurantId) {
-		this.restaurantId = restaurantId;
-	}
-	public String getMenuName() {
-		return MenuName;
-	}
-	public void setCategory(String MenuName) {
-		this.MenuName=MenuName;
-	}
-} 
+   
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+ 
+   
+
+	public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
+    @JsonCreator
+    public Menu(@JsonProperty("name") String MenuName) {
+        this.menuName= MenuName;
+    }
+
+    public Menu(@JsonProperty("name") String MenuName,@JsonProperty("restaurant") Restaurant restaurant) {
+        this.menuName= MenuName;
+        this.restaurant = restaurant;
+    }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+                "id=" + menuId +
+                ", name='" + menuName + '\'' +
+                ", items=" + items.toString() +
+                '}';
+    }
+}
