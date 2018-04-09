@@ -1,15 +1,20 @@
 package com.system.entity;
-import com.fasterxml.jackson.annotation.*;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.*;
 
 import java.util.List;
 
-@Entity
-@Data
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Entity
 @Table(name="Menu")
 @NoArgsConstructor
 public class Menu {
@@ -20,11 +25,12 @@ public class Menu {
 
     private String menuName;
     
-    @JsonBackReference
+    @JsonBackReference(value="restaurant-menu")
     @ManyToOne
     @JoinColumn(name = "RestaurantId")
     private Restaurant restaurant;
 
+    @JsonManagedReference(value="menu-menuitem")
     @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL,orphanRemoval=true)
     private List<MenuItem> items;
 
@@ -49,14 +55,12 @@ public class Menu {
     }
 
     @JsonCreator
-    public Menu(@JsonProperty("name") String MenuName) {
+    public Menu(@JsonProperty("menuId") String MenuId, @JsonProperty("menuName") String MenuName) {
         this.menuName= MenuName;
+       
     }
 
-    public Menu(@JsonProperty("name") String MenuName,@JsonProperty("restaurant") Restaurant restaurant) {
-        this.menuName= MenuName;
-        this.restaurant = restaurant;
-    }
+    
 
     @Override
     public String toString() {
@@ -66,4 +70,5 @@ public class Menu {
                 ", items=" + items.toString() +
                 '}';
     }
+    
 }
