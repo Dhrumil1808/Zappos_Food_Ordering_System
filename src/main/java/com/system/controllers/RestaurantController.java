@@ -1,18 +1,22 @@
 package com.system.controllers;
-
-import java.net.URI;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.system.dao.MenuDAO;
 import com.system.dao.RestaurantDAO;
@@ -29,7 +33,9 @@ public class RestaurantController {
 
     @Autowired
     private MenuDAO menuDAO;
-
+    
+    
+ 
     @GetMapping("/restaurants")
     public List<Restaurant> getRestaurants() {
         List<Restaurant> restaurants = (List<Restaurant>) restaurantDAO.findAll();
@@ -39,29 +45,19 @@ public class RestaurantController {
     @GetMapping("/restaurants/{id}")
     public Restaurant findRestaurantById(@PathVariable("id") int id) {
         Restaurant rest = restaurantDAO.findOne(id);
-        System.out.println(rest);
-        List<Menu> menus = rest.getMenus();
-        System.out.println(menus.size());
-        for(Menu menu:menus){
-        	System.out.println(menu);
-        }
+        System.out.println("Restaurant Object:" + rest);
+        
         return rest;
     }
 
     @PostMapping("/restaurants")
-    /*public void upload(@RequestBody List<Restaurant> restaurants) {
-        restaurantDAO.save(restaurants);
-    }*/
-    public ResponseEntity<Object> createStudent(@RequestBody Restaurant restaurant) {
-		Restaurant ressaved = restaurantDAO.save(restaurant);
-
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(ressaved.getRestaurantId()).toUri();
-
-		return ResponseEntity.created(location).build();
-
-	}
-
+    @ResponseBody 
+    public void addRestaurants(@RequestBody  Restaurant restaurant) {
+    	System.out.println(restaurant.getRestaurantName());
+	 		 restaurantDAO.save(restaurant);
+    }
+    
+ 
     @DeleteMapping("/restaurants")
     public void deleteAll() {
         restaurantDAO.deleteAll();
@@ -71,12 +67,15 @@ public class RestaurantController {
     public void deleteById(@PathVariable("id") int id) {
         restaurantDAO.delete(id);
     }
+    
+    
 
     @GetMapping("/restaurants/{id}/menus/")
     public List<Menu> getMenus(@PathVariable("id") int id) {
         Restaurant rest = restaurantDAO.findOne(id);
         if (rest != null)
             return menuDAO.findAll();
+        
         return new LinkedList<Menu>();
     }
 

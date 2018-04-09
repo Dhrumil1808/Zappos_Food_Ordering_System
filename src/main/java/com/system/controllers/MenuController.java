@@ -2,8 +2,6 @@ package com.system.controllers;
 
 import java.util.List;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
@@ -41,9 +39,9 @@ public class MenuController {
         return menuDAO.findOne(id);
     }
 
-    @PostMapping("/menus/")
+    @PostMapping("/menus")
     @ResponseStatus(HttpStatus.CREATED)
-    public void upload(@RequestBody List<Menu> menuList) {
+    public void upload(Menu menuList) {
         menuDAO.save(menuList);
     }
 
