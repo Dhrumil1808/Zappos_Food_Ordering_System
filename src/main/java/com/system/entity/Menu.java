@@ -3,7 +3,6 @@ package com.system.entity;
 
 
 import javax.persistence.*;
-
 import com.fasterxml.jackson.annotation.*;
 
 import java.util.List;
@@ -23,7 +22,25 @@ public class Menu {
     @Id
     private int menuId;
 
-    private String menuName;
+    public int getMenuId() {
+		return menuId;
+	}
+
+	public void setMenuId(int menuId) {
+		this.menuId = menuId;
+	}
+
+	public String getMenuName() {
+		return menuName;
+	}
+
+	public void setMenuName(String menuName) {
+		this.menuName = menuName;
+	}
+
+
+
+	private String menuName;
     
     @JsonBackReference(value="restaurant-menu")
     @ManyToOne
@@ -31,7 +48,7 @@ public class Menu {
     private Restaurant restaurant;
 
     @JsonManagedReference(value="menu-menuitem")
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL,orphanRemoval=true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE,orphanRemoval=true)
     private List<MenuItem> items;
 
     
@@ -57,7 +74,7 @@ public class Menu {
     @JsonCreator
     public Menu(@JsonProperty("menuId") String MenuId, @JsonProperty("menuName") String MenuName) {
         this.menuName= MenuName;
-       
+        this.restaurant=restaurant;
     }
 
     

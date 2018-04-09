@@ -23,7 +23,6 @@ import com.google.gson.GsonBuilder;
 @Entity
 @Table(name="Restaurant")
 @NoArgsConstructor
-
 public class Restaurant {
 
 	@Id
@@ -33,7 +32,7 @@ public class Restaurant {
     private String restaurantName;
  
     @JsonManagedReference(value="restaurant-menu")
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurant",fetch=FetchType.EAGER,orphanRemoval=true)
     private List<Menu> menus;  
 
     public String getRestaurantName() {

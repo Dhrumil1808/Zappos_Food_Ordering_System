@@ -3,8 +3,6 @@ package com.system.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,15 +16,39 @@ import org.codehaus.jackson.annotate.JsonCreator;
 @Table(name="MenuItem")
 @NoArgsConstructor
 public class MenuItem {
-
-	
-    @Id
+	@Id
     @GeneratedValue
     private int ItemId;
 
     private String ItemName;
 
     private Double ItemPrice;
+	
+    public int getItemId() {
+		return ItemId;
+	}
+
+	public void setItemId(int itemId) {
+		ItemId = itemId;
+	}
+
+	public String getItemName() {
+		return ItemName;
+	}
+
+	public void setItemName(String itemName) {
+		ItemName = itemName;
+	}
+
+	public Double getItemPrice() {
+		return ItemPrice;
+	}
+
+	public void setItemPrice(Double itemPrice) {
+		ItemPrice = itemPrice;
+	}
+
+
     
     @JsonBackReference(value="menu-menuitem")
     @ManyToOne
@@ -60,7 +82,7 @@ public class MenuItem {
     
    
     @JsonCreator
-    public MenuItem(@JsonProperty("name") String ItemName, @JsonProperty("price") Double ItemPrice) {
+    public MenuItem(@JsonProperty("ItemId") int id, @JsonProperty("ItemName") String ItemName, @JsonProperty("ItemPrice") Double ItemPrice) {
         this.ItemName = ItemName;
         this.ItemPrice = ItemPrice;
     }
