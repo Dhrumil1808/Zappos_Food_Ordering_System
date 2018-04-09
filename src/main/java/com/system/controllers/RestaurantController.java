@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.system.dao.MenuDAO;
+import com.system.dao.MenuItemDAO;
 import com.system.dao.RestaurantDAO;
 import com.system.entity.Menu;
+import com.system.entity.MenuItem;
 import com.system.entity.Restaurant;
 
 
@@ -35,7 +37,8 @@ public class RestaurantController {
     @Autowired
     private MenuDAO menuDAO;
     
-    
+    @Autowired
+    private MenuItemDAO menuitemDAO;
  
     @GetMapping("/restaurants")
     public List<Restaurant> getRestaurants() {
@@ -92,13 +95,44 @@ public class RestaurantController {
         menuDAO.save(menu);
     }
 
+    @PostMapping("/restaurants/{id}/menus/{menuid}/items")
+    public void addMenuItems(@PathVariable("id") int id, Menu menus,@PathVariable("menuid") int menuid, @RequestBody MenuItem items) {
+        Restaurant rest = restaurantDAO.findOne(id);
+        if (rest == null)
+            return ;
+        
+       System.out.println("restaurant " + rest);
+        
+       List<Menu> menu = menuDAO.findByRestaurantRestaurantId(id);
+        System.out.println(menu.size());
+        
+       
+        	
+        
+       List<MenuItem> menuitem = menuitemDAO.findByMenuMenuId(menuid);
+       MenuItem menuitems =  new MenuItem(items.getItemId(),items.getItemName(),items.getItemPrice());
+       menuitems.setRestaurant(rest);
+       int i=0;
+       for(Menu m:menu){
+       	if(menuid==m.getMenuId()){
+       	 menuitems.setMenu(menu.get(i));
+       	 break;
+       	}
+       	i++;
+       }
+     
+       menuitem.add(menuitems);
+       menuitemDAO.save(menuitems);
+    }
+
+    
     @DeleteMapping("/restaurants/{id}/menus")
-    @Transactional
     public void deleteMenusFromRestaurant(@PathVariable("id") int id) {
         Restaurant rest = restaurantDAO.findOne(id);
         if (rest == null)
             return ;
-        menuDAO.deleteByRestaurantRestaurantId(id);
+        List<Menu> menus = menuDAO.findByRestaurantRestaurantId(id);
+        menuDAO.delete(menus);
     }
 
     @DeleteMapping("/restaurants/{id}/menus/{menuid}")
@@ -107,6 +141,6 @@ public class RestaurantController {
     	 if(rest==null)
     		 return;
     	 List<Menu> menus = menuDAO.findByRestaurantRestaurantId(id);
-       menuDAO.delete(id);
+    	 menuDAO.delete(id);
     }
 }

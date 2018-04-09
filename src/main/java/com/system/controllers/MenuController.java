@@ -65,7 +65,7 @@ public class MenuController {
         return menuitemDAO.findByMenuMenuId(id);
     }
 
-    @PostMapping("/menus/{id}/items/")
+  /*  @PostMapping("/menus/{id}/items/")
     public void addItems(@PathVariable("id") int id,@RequestBody List<MenuItem> items) {
         Menu menu = menuDAO.findOne(id);
         if (menu == null)
@@ -75,5 +75,5 @@ public class MenuController {
             item.setMenu(menu);
 
         menuitemDAO.save(items);
-    }
+    }*/
 }
