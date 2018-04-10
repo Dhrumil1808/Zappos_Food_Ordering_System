@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -56,6 +57,19 @@ public class RestaurantController {
     public void addRestaurants(@RequestBody  Restaurant restaurant) {
     	//System.out.println(restaurant.getRestaurantName());
 	 		 restaurantDAO.save(restaurant);
+    }
+    
+    
+    @PutMapping("/restaurants/{id}")
+    @ResponseBody 
+    public void editRestaurants(@PathVariable("id") int id,@RequestBody  Restaurant restaurant) {
+    	//System.out.println(restaurant.getRestaurantName());
+    		Restaurant rest = restaurantDAO.findOne(id);
+    		if(rest!=null){
+    			rest.setRestaurantName(restaurant.getRestaurantName());
+    		}
+    		restaurantDAO.save(rest);
+	 		 //restaurantDAO.save(restaurant);
     }
     
  
@@ -109,7 +123,25 @@ public class RestaurantController {
         menu.add(nmenu);
         menuDAO.save(menu);
     }
+    
 
+    @PutMapping("/restaurants/{id}/menus/{menuid}")
+    public void editMenus(@PathVariable("id") int id, @RequestBody Menu menus,@PathVariable("menuid") int menuid) {
+        Restaurant rest = restaurantDAO.findOne(id);
+        if (rest == null)
+            return ;
+
+        List<Menu> menu = menuDAO.findByRestaurantRestaurantId(id);
+        for(Menu m:menu){
+        	if(menuid==m.getMenuId()){
+        		m.setMenuName(menus.getMenuName());
+        	}
+        }
+        
+        menuDAO.save(menu);
+    }
+
+    
     @PostMapping("/restaurants/{id}/menus/{menuid}/items")
     public void addMenuItems(@PathVariable("id") int id, Menu menus,@PathVariable("menuid") int menuid, @RequestBody MenuItem items) {
         Restaurant rest = restaurantDAO.findOne(id);
@@ -137,6 +169,45 @@ public class RestaurantController {
        menuitemDAO.save(menuitems);
     }
 
+    
+    @PutMapping("/restaurants/{id}/menus/{menuid}/items/{itemid}")
+    public void editMenuItems(@PathVariable("id") int id, Menu menus,@PathVariable("menuid") int menuid, @RequestBody MenuItem items,@PathVariable("itemid") int itemid) {
+        Restaurant rest = restaurantDAO.findOne(id);
+        if (rest == null)
+            return ;
+        
+       System.out.println("restaurant " + rest);
+        
+       List<Menu> menu = menuDAO.findByRestaurantRestaurantId(id);
+       List<MenuItem> menuitem = new ArrayList<>();
+       
+       boolean put = false;
+       
+        for(Menu m:menu){
+        	System.out.println(m.getMenuId());
+       	if(menuid==m.getMenuId()){
+       	 menuitem = menuitemDAO.findByMenuMenuId(menuid);
+       	for(MenuItem mi:menuitem){
+       		if(mi.getItemId()==itemid){
+       			if(mi.getItemName()!="")
+       			mi.setItemName(items.getItemName());
+       			if(items.getItemPrice()!=0)
+       			mi.setItemPrice(items.getItemPrice());
+       			menuitemDAO.save(menuitem);
+           		menuDAO.save(menu);
+       			break;
+       		}
+       	}
+       	if(put){
+       		break;
+       	}
+       }
+        }
+       
+//       menuitem.add(menuitems);
+  //     menuitemDAO.save(menuitems);
+
+    }
     
     @DeleteMapping("/restaurants/{id}/menus")
     public void deleteMenusFromRestaurant(@PathVariable("id") int id) {
