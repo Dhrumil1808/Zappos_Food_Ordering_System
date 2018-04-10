@@ -22,7 +22,7 @@ public class MenuItem {
 
     private String ItemName;
 
-    private Double ItemPrice;
+    private int ItemPrice;
 	
     public int getItemId() {
 		return ItemId;
@@ -40,11 +40,11 @@ public class MenuItem {
 		ItemName = itemName;
 	}
 
-	public Double getItemPrice() {
+	public int getItemPrice() {
 		return ItemPrice;
 	}
 
-	public void setItemPrice(Double itemPrice) {
+	public void setItemPrice(int itemPrice) {
 		ItemPrice = itemPrice;
 	}
 
@@ -82,7 +82,7 @@ public class MenuItem {
     
    
     @JsonCreator
-    public MenuItem(@JsonProperty("ItemId") int id, @JsonProperty("ItemName") String ItemName, @JsonProperty("ItemPrice") Double ItemPrice) {
+    public MenuItem(@JsonProperty("ItemId") int id, @JsonProperty("ItemName") String ItemName, @JsonProperty("ItemPrice") int ItemPrice) {
         this.ItemName = ItemName;
         this.ItemPrice = ItemPrice;
     }
