@@ -1,7 +1,12 @@
 package com.system.entity;
 
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
+
+import org.springframework.core.serializer.support.DeserializingConverter;
+import org.springframework.core.serializer.support.SerializingConverter; 
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -23,7 +28,17 @@ import com.google.gson.GsonBuilder;
 @Entity
 @Table(name="Restaurant")
 @NoArgsConstructor
-public class Restaurant {
+public class Restaurant implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6997499182545244592L;
+
+	/**
+	 * 
+	 */
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -33,7 +48,7 @@ public class Restaurant {
  
     @JsonManagedReference(value="restaurant-menu")
     @OneToMany(mappedBy = "restaurant",fetch=FetchType.EAGER,orphanRemoval=true)
-    private List<Menu> menus;  
+    private Set<Menu> menus;  
 
     public String getRestaurantName() {
 		return restaurantName;
@@ -50,17 +65,26 @@ public class Restaurant {
 		this.restaurantId = restaurantId;
 	}
 
-	public List<Menu> getMenus() {
+	public Set<Menu> getMenus() {
 		return menus;
 	}
 
-	public void setMenus(List<Menu> menus) {
+	public void setMenus(Set<Menu> menus) {
 		this.menus = menus;
 	}
+	
+
+	public Restaurant(int id, String name){
+		this.restaurantId = id;
+		this.restaurantName = name;
+	}
+	
+	
 	
     @JsonCreator
     public Restaurant(@JsonProperty("name") String RestaurantName) {
       this.restaurantName = RestaurantName;
+  
         //System.out.println(this.restaurantName);
        /* if (menus.size() > 0 ) {
             this.menus = menus;
@@ -76,6 +100,8 @@ public class Restaurant {
                 "id=" + restaurantId +
                 ", name='" + restaurantName + '\'' + menus.toString() +  '}';
     }
+
+
 
 	
 }

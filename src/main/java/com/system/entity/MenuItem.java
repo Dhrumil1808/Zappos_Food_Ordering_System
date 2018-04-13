@@ -1,21 +1,42 @@
 package com.system.entity;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import org.springframework.core.serializer.support.DeserializingConverter;
+import org.springframework.core.serializer.support.SerializingConverter; 
 import org.codehaus.jackson.annotate.JsonCreator;
+
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name="MenuItem")
 @NoArgsConstructor
-public class MenuItem {
+public class MenuItem implements Serializable
+{
+	/**
+	 * 
+	 */
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID =  -3535420909435558948L;
+
+	/**
+	 * 
+	 */
+	
+
 	@Id
     @GeneratedValue
     private int ItemId;
@@ -80,9 +101,14 @@ public class MenuItem {
 	}
     
     
+    public MenuItem(int id, String name,int price){
+		this.ItemId = id;
+		this.ItemName = name;
+		this.ItemPrice = price;
+	} 
    
     @JsonCreator
-    public MenuItem(@JsonProperty("ItemId") int id, @JsonProperty("ItemName") String ItemName, @JsonProperty("ItemPrice") int ItemPrice) {
+    public MenuItem(@JsonProperty("ItemName") String ItemName, @JsonProperty("ItemPrice") int ItemPrice) {
         this.ItemName = ItemName;
         this.ItemPrice = ItemPrice;
     }

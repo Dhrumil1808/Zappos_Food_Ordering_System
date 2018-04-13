@@ -2,9 +2,15 @@ package com.system.entity;
 
 
 
+
 import javax.persistence.*;
+
+import org.springframework.core.serializer.support.DeserializingConverter;
+import org.springframework.core.serializer.support.SerializingConverter; 
+
 import com.fasterxml.jackson.annotation.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -16,9 +22,27 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="Menu")
 @NoArgsConstructor
-public class Menu {
+public class Menu implements Serializable {
 
-    @GeneratedValue
+    /**
+	 * 
+	 */
+	
+
+	/**
+	 * 
+	 */
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3297908590148515382L;
+
+	/**
+	 * 
+	 */
+	
+	@GeneratedValue
     @Id
     private int menuId;
 
@@ -48,7 +72,7 @@ public class Menu {
     private Restaurant restaurant;
 
     @JsonManagedReference(value="menu-menuitem")
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE,orphanRemoval=true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.REMOVE,fetch=FetchType.EAGER,orphanRemoval=true)
     private List<MenuItem> items;
 
     
@@ -70,9 +94,14 @@ public class Menu {
 	public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
+	
+	public Menu(int id, String name){
+		this.menuId = id;
+		this.menuName = name;
+	}
 
     @JsonCreator
-    public Menu(@JsonProperty("menuId") String MenuId, @JsonProperty("menuName") String MenuName) {
+    public Menu(@JsonProperty("menuName") String MenuName) {
         this.menuName= MenuName;
         this.restaurant=restaurant;
     }
