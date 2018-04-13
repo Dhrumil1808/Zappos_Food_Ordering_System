@@ -3,8 +3,18 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.core.serializer.support.DeserializingConverter;
+import org.springframework.core.serializer.support.SerializingConverter; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,28 +48,32 @@ public class RestaurantController {
     @Autowired
     private MenuItemDAO menuitemDAO;
  
+  
+    //@Cacheable(value="rest",key="#p0")
     @GetMapping("/restaurants")
     public List<Restaurant> getRestaurants() {
         List<Restaurant> restaurants = (List<Restaurant>) restaurantDAO.findAll();
         return restaurants;
     }
 
+    
+    
     @GetMapping("/restaurants/{id}")
     public Restaurant findRestaurantById(@PathVariable("id") int id) {
         Restaurant rest = restaurantDAO.findOne(id);
-        System.out.println("Restaurant Object:" + rest);
-        
+       System.out.println(rest.getMenus().size());
+ 
         return rest;
     }
 
     @PostMapping("/restaurants")
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody 
     public void addRestaurants(@RequestBody  Restaurant restaurant) {
-    	//System.out.println(restaurant.getRestaurantName());
-	 		 restaurantDAO.save(restaurant);
+    		 restaurantDAO.save(restaurant);
     }
     
-    
+    @CachePut(value = "resto", key = "#p0")
     @PutMapping("/restaurants/{id}")
     @ResponseBody 
     public void editRestaurants(@PathVariable("id") int id,@RequestBody  Restaurant restaurant) {
@@ -72,7 +86,7 @@ public class RestaurantController {
 	 		 //restaurantDAO.save(restaurant);
     }
     
- 
+    @CacheEvict(value = "rest0", allEntries=true)
     @DeleteMapping("/restaurants")
     public void deleteAll() {
         restaurantDAO.deleteAll();
@@ -83,6 +97,7 @@ public class RestaurantController {
         restaurantDAO.delete(id);
     }
     
+    //@Cacheable(value = "restaurantmenu", key = "#p0")
     @GetMapping("/restaurants/{id}/menus")
     public List<Menu> getMenus(@PathVariable("id") int id) {
         Restaurant rest = restaurantDAO.findOne(id);
@@ -93,7 +108,7 @@ public class RestaurantController {
         return new LinkedList<Menu>();
     }
     
-
+    @Cacheable(value = "menuitems", key = "#p0")
     @GetMapping("/restaurants/{id}/menus/{menuid}")
     public List<MenuItem> getMenuItemsFromMenu(@PathVariable("id") int id,@PathVariable("menuid") int menuid) {
         Restaurant rest = restaurantDAO.findOne(id);
@@ -112,19 +127,20 @@ public class RestaurantController {
     }
 
     @PostMapping("/restaurants/{id}/menus")
+    @ResponseStatus(HttpStatus.CREATED)
     public void addMenus(@PathVariable("id") int id, @RequestBody Menu menus) {
         Restaurant rest = restaurantDAO.findOne(id);
         if (rest == null)
             return ;
 
         List<Menu> menu = menuDAO.findByRestaurantRestaurantId(id);
-        Menu nmenu = new Menu(String.valueOf(menus.getMenuId()),menus.getMenuName());
+        Menu nmenu = new Menu(menus.getMenuName());
         nmenu.setRestaurant(rest);
         menu.add(nmenu);
         menuDAO.save(menu);
     }
     
-
+    @CachePut(value = "restaurant", key = "#p0")
     @PutMapping("/restaurants/{id}/menus/{menuid}")
     public void editMenus(@PathVariable("id") int id, @RequestBody Menu menus,@PathVariable("menuid") int menuid) {
         Restaurant rest = restaurantDAO.findOne(id);
@@ -143,7 +159,8 @@ public class RestaurantController {
 
     
     @PostMapping("/restaurants/{id}/menus/{menuid}/items")
-    public void addMenuItems(@PathVariable("id") int id, Menu menus,@PathVariable("menuid") int menuid, @RequestBody MenuItem items) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void addMenuItems(@PathVariable("id") int id,@PathVariable("menuid") int menuid, @RequestBody MenuItem items) {
         Restaurant rest = restaurantDAO.findOne(id);
         if (rest == null)
             return ;
@@ -169,7 +186,7 @@ public class RestaurantController {
        menuitemDAO.save(menuitems);
     }
 
-    
+    @CachePut(value = "menuitem", key = "#p0")
     @PutMapping("/restaurants/{id}/menus/{menuid}/items/{itemid}")
     public void editMenuItems(@PathVariable("id") int id, Menu menus,@PathVariable("menuid") int menuid, @RequestBody MenuItem items,@PathVariable("itemid") int itemid) {
         Restaurant rest = restaurantDAO.findOne(id);
@@ -204,8 +221,6 @@ public class RestaurantController {
        }
         }
        
-//       menuitem.add(menuitems);
-  //     menuitemDAO.save(menuitems);
 
     }
     
@@ -234,6 +249,24 @@ public class RestaurantController {
     		 }
     		 i++;
     	 }
+    	
+    }
+    
+    @DeleteMapping("/restaurants/{id}/menus/{menuid}/items")
+    public void deleteallMenuItems(@PathVariable("id") int id, @PathVariable("menuid") int menuid) {
+    	 Restaurant rest = restaurantDAO.findOne(id);
+    	 if(rest==null)
+    		 return;
+    	 List<Menu> menus = menuDAO.findByRestaurantRestaurantId(id);
+    	 List<MenuItem> menuitem = new ArrayList<>();
+    	 for(Menu m:menus){
+    		 if(m.getMenuId()==menuid){
+    			 menuitem  = menuitemDAO.findByMenuMenuId(menuid);
+    		 	 break;
+    		 }
+    	 }
+    	 
+    	 menuitemDAO.delete(menuitem);
     	
     }
     
