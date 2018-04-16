@@ -16,17 +16,37 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
 		<start-class>com.system.Application</start-class>
+		<docker.image.prefix>Foodorder</docker.image.prefix>
 		 
     </properties>
 
-
-    <build>
+	<build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+              <plugin>
+			<groupId>com.spotify</groupId>
+			<artifactId>docker-maven-plugin</artifactId>
+			<version>0.4.11</version>
+			<configuration>
+			<buildArgs>
+		             <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+				</buildArgs>
+				<imageName>zapposorder</imageName>
+				<dockerDirectory>${project.basedir}</dockerDirectory>
+				<resources>
+					<resource>
+						<targetPath>/</targetPath>
+						<directory>${project.build.directory}</directory>
+						<include>${project.artifactId}.jar</include>
+					</resource>
+				</resources>
+			</configuration>
+		</plugin>
         </plugins>
+        <finalName>zapjar</finalName>
     </build>
     
 	<dependencies>
@@ -130,7 +150,14 @@
 	    	<artifactId>mysql-connector-java</artifactId>
 	  </dependency>
 	  
+	  <dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>${jackson.version}</version>
+	</dependency>
+
 	</dependencies>
 	
+    
   
 </project>
