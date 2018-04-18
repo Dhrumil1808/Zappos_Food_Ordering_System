@@ -59,7 +59,7 @@ public class RestaurantTests {
     public void getAllRestaurants() throws Exception {
 
     	List<Restaurant> restaurant = restaurantDAO.findAll();
-    	List<Restaurant> rest =new ArrayList<>(restaurant);
+    	List<Restaurant> rest =new ArrayList<Restaurant>(restaurant);
     	
     	
     	for(Restaurant r: rest){
