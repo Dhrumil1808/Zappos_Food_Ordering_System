@@ -29,9 +29,13 @@ For creating test cases :
 
 
 The whole application is **dockerized** using three dockers:
-**Spring Boot Docker**
-**MySQL Docker**
+**Spring Boot Docker**, 
+**MySQL Docker**, 
 **Redis Docker**
+
+**pom.xml** contains all the dependancies for maven, redis and the docker.
+
+**Dockerfile** is used for dockerizing the spring boot application while the redis and mysql dockers are  directly downloaded from docker hub.
 
 **docker-compose"** is used for running the whole application.
 
