@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.system.dao.MenuDAO;
 import com.system.dao.MenuItemDAO;
 import com.system.dao.RestaurantDAO;
-import com.system.entity.CustomException;
 import com.system.entity.Menu;
 import com.system.entity.MenuItem;
 import com.system.entity.Restaurant;
@@ -65,9 +64,9 @@ public class RestaurantController {
     public Restaurant findRestaurantById(@PathVariable("id") int id) throws Exception {
         Restaurant rest = restaurantDAO.findOne(id);
         try{
-      Set<Menu> menus = new HashSet<>();
+      Set<Menu> menus = new HashSet<Menu>();
       menus.addAll(rest.getMenus());
-      List<Menu> menu = new ArrayList<>();
+      List<Menu> menu = new ArrayList<Menu>();
       menu.addAll(menus);
       rest.setMenus(menu);
         }
@@ -101,7 +100,7 @@ public class RestaurantController {
     public List<MenuItem> getMenuItemsFromMenu(@PathVariable("id") int id,@PathVariable("menuid") int menuid) {
         Restaurant rest = restaurantDAO.findOne(id);
         System.out.println(rest);
-        List<Menu> menu = new ArrayList<>();
+        List<Menu> menu = new ArrayList<Menu>();
         if (rest != null)
              menu = menuDAO.findByRestaurantRestaurantId(id);
        
@@ -246,7 +245,7 @@ public class RestaurantController {
     	 if(rest==null)
     		 return;
     	 List<Menu> menus = menuDAO.findByRestaurantRestaurantId(id);
-    	 List<MenuItem> menuitem = new ArrayList<>();
+    	 List<MenuItem> menuitem = new ArrayList<MenuItem>();
     	 for(Menu m:menus){
     		 if(m.getMenuId()==menuid){
     			 menuitem  = menuitemDAO.findByMenuMenuId(menuid);
@@ -269,7 +268,7 @@ public class RestaurantController {
     	 if(rest==null)
     		 return;
     	 List<Menu> menus = menuDAO.findByRestaurantRestaurantId(id);
-    	 List<MenuItem> menuitem = new ArrayList<>();
+    	 List<MenuItem> menuitem = new ArrayList<MenuItem>();
     	 for(Menu m:menus){
     		 if(m.getMenuId()==menuid)
     			 menuitem  = menuitemDAO.findByMenuMenuId(menuid);
@@ -344,7 +343,7 @@ public class RestaurantController {
        System.out.println("restaurant " + rest);
         
        List<Menu> menu = menuDAO.findByRestaurantRestaurantId(id);
-       List<MenuItem> menuitem = new ArrayList<>();
+       List<MenuItem> menuitem = new ArrayList<MenuItem>();
        
        boolean put = false;
        
