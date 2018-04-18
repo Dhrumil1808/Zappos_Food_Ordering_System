@@ -28,6 +28,10 @@ For creating test cases :
  **Mochito**
 
 
+The whole application is **dockerized** using three dockers:
+**Spring Boot Docker**
+**MySQL Docker**
+**Redis Docker**
 
 ## REST APIs
 
