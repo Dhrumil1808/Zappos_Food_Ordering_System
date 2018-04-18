@@ -25,13 +25,19 @@ The technologies used for developing this API are:
 
 For creating test cases :
  **JUnit**,
- **Mochito**
+ **Mockito**
 
 
 The whole application is **dockerized** using three dockers:
 **Spring Boot Docker**
 **MySQL Docker**
 **Redis Docker**
+
+**docker-compose"** is used for running the whole application.
+
+**src/main/resources/application.properties** define parameters for runnning the application in **localhost** as well as in the **docker** .
+
+I have used **Ubuntu 14.04** for running the application on localhost as well as for the docker.
 
 ## REST APIs
 
