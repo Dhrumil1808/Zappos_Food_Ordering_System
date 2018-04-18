@@ -4,19 +4,11 @@ package com.system.entity;
 
 
 import javax.persistence.*;
-
-import org.springframework.core.serializer.support.DeserializingConverter;
-import org.springframework.core.serializer.support.SerializingConverter; 
-
 import com.fasterxml.jackson.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
-
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
-
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
@@ -24,15 +16,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Menu implements Serializable {
 
-    /**
-	 * 
-	 */
-	
-
-	/**
-	 * 
-	 */
-	
 	/**
 	 * 
 	 */
