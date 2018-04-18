@@ -48,7 +48,7 @@ public class Restaurant implements Serializable {
  
     @JsonManagedReference(value="restaurant-menu")
     @OneToMany(mappedBy = "restaurant",fetch=FetchType.EAGER,orphanRemoval=true)
-    private Set<Menu> menus;  
+    private List<Menu> menus;  
 
     public String getRestaurantName() {
 		return restaurantName;
@@ -65,11 +65,11 @@ public class Restaurant implements Serializable {
 		this.restaurantId = restaurantId;
 	}
 
-	public Set<Menu> getMenus() {
+	public List<Menu> getMenus() {
 		return menus;
 	}
 
-	public void setMenus(Set<Menu> menus) {
+	public void setMenus(List<Menu> menus) {
 		this.menus = menus;
 	}
 	
