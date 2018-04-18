@@ -14,15 +14,4 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-   /*
-    public ApplicationRunner demo(RestaurantDAO cr) {
-        return args -> {
-            Restaurant r1 = new Restaurant(1,"Restaurant1", null);
-            Menu menu = new Menu(1, "name1", r1);
-            Menu[] menus = {menu};
-            r1.setMenus(new LinkedList<>(Arrays.asList(menus)));
-            cr.save(r1);
-            cr.save(new Restaurant(2, "Restauant2", null));
-        };
-    } */
 }
