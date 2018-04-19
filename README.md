@@ -241,4 +241,6 @@ Comment the sql server url for localhost and uncomment the one for the docker. S
 
 8) docker-compose build and then docker-compose up
  
-These steps are performed in ## Ubuntu 14.04 in which my docker had a static IP of "172.17.0.1".
+ The app will run on http://localhost:8087 instead of http://localhost:8080
+ 
+These steps are performed in Ubuntu 14.04 in which my docker had a static IP of "172.17.0.1".
