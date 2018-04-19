@@ -43,6 +43,7 @@ The whole application is **dockerized** using three dockers:
 
 I have used **Ubuntu 14.04** for running the application on localhost as well as for the docker.
 
+
 ## REST APIs
 
 ### Get all Restaurants
@@ -199,3 +200,45 @@ Request Body
 }
 
 Return HttpStatus.Ok
+
+
+
+## Steps for running it on localhost
+
+1) git clone https://github.com/Dhrumil1808/Zappos_Food_Ordering_System.git
+
+2) Import it as an "Existing Maven Project"  in Eclipse or any other IDE.
+
+3)  From the terminal, enter into the repository and enter the command ## "mvn clean install -DskipTests" (for skipping the JUnit Test cases right now)"
+
+4) Create the database in localhost (on mysql workbench) as suggested in the documentation. 
+
+5) Run the Application by running the "Application class" in (src/main/java/com/system/Application.java) as it contains the main method.
+
+6) REST APIs can be tested on Postman and Unit test cases can be runned by running the RestaurantTests.java file which is located in src/test/java/com/system/RestaurantTests.java
+
+
+## Steps for running it as docker containers
+1) git clone https://github.com/Dhrumil1808/Zappos_Food_Ordering_System.git
+
+2) Import it as an "Existing Maven Project"  in Eclipse or any other IDE.
+
+3) Install docker and docker-compose.
+
+4) Install the MySQL docker container
+ docker run -d -p 3307:3306 --name zappos  -e MYSQL_ROOT_PASSWORD=root  -e MYSQL_DATABASE=Zappos -e MYSQL_USER=root -MYSQL_PASSWORD=root  mysql:5.6
+ 
+5) Install the redis container
+  docker run --name redis -d redis redis-server --appendonly yes
+ 
+ 
+ 6) Create docker network by this command "docker network create my-net"
+
+7) Go to src/main/resources/application.properties
+Comment the sql server url for localhost and uncomment the one for the docker. Similarly, comment the spring.redis.host and spring.redis.port for the localhost and uncomment the same for the docker container.
+
+ 7)  Run the command from the terminal after entering in the root directory of the project ## "mvn clean install -DskipTests"
+
+8) docker-compose build and then docker-compose up
+ 
+These steps are performed in ## Ubuntu 14.04 in which my docker had a static IP of "172.17.0.1".
