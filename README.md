@@ -219,7 +219,7 @@ Return HttpStatus.Ok
 
 
 ## Steps for running it as docker containers
-1) git clone https://github.com/Dhrumil1808/Zappos_Food_Ordering_System.git
+1) git clone https://github.com/Dhrumil1808/Food_Ordering_System.git
 
 2) Import it as an "Existing Maven Project"  in Eclipse or any other IDE.
 
