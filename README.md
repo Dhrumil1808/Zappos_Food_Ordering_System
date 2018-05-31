@@ -1,4 +1,4 @@
-# Zappos_Food_Ordering_API
+# Food Ordering API
 
 This is the API for ordering food from various restaurants. This API mainly concentrates on listing all the restaurants with their menus and their menu items.
 
